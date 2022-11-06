@@ -37,46 +37,38 @@
         </div>
         <p id="result">Vysledok</p>
         <div class="btn">
-            <button class="btn btn-secondary btn-lg" onclick="plus()">+</button>
-            <button class="btn btn-secondary btn-lg" onclick="minus()">-</button>
-            <button class="btn btn-secondary btn-lg" onclick="krat()">*</button>
-            <button class="btn btn-secondary btn-lg" onclick="delenie()">/</button>
+            <button class="btn btn-secondary btn-lg" onclick="calc('+')">+</button>
+            <button class="btn btn-secondary btn-lg" onclick="calc('-')">-</button>
+            <button class="btn btn-secondary btn-lg" onclick="calc('*')">*</button>
+            <button class="btn btn-secondary btn-lg" onclick="calc('/')">/</button>
         </div>
         <div class="btn">
-            <button class="btn btn-secondary btn-lg" onclick="plus()">+</button>
-            <button class="btn btn-secondary btn-lg" onclick="minus()">-</button>
-            <button class="btn btn-secondary btn-lg" onclick="krat()">*</button>
-            <button class="btn btn-secondary btn-lg" onclick="delenie()">/</button>
+            <button class="btn btn-secondary btn-lg" onclick="calc('+')">+</button>
+            <button class="btn btn-secondary btn-lg" onclick="calc('-')">-</button>
+            <button class="btn btn-secondary btn-lg" onclick="calc('*')">*</button>
+            <button class="btn btn-secondary btn-lg" onclick="calc('/')">/</button>
         </div>
         
     </body>
     <script>
-        function plus() {
+        function calc(op) {
             let num1 = document.getElementById("n1").value;
             let num2 = document.getElementById("n2").value;
             let res = document.getElementById("result").value;
-            res = parseFloat(num1) + parseFloat(num2);
-            result.innerHTML = res;
-        }
-        function minus() {
-            let num1 = document.getElementById("n1").value;
-            let num2 = document.getElementById("n2").value;
-            let res = document.getElementById("result").value;
-            res = parseFloat(num1) - parseFloat(num2);
-            result.innerHTML = res;
-        }
-        function krat() {
-            let num1 = document.getElementById("n1").value;
-            let num2 = document.getElementById("n2").value;
-            let res = document.getElementById("result").value;
-            res = parseFloat(num1) * parseFloat(num2);
-            result.innerHTML = res;
-        }
-        function delenie() {
-            let num1 = document.getElementById("n1").value;
-            let num2 = document.getElementById("n2").value;
-            let res = document.getElementById("result").value;
-            res = parseFloat(num1) / parseFloat(num2);
+            switch(op) {
+                case '+':
+                    res = parseFloat(num1) + parseFloat(num2);
+                    break;
+                case '-':
+                    res = parseFloat(num1) - parseFloat(num2);
+                    break;
+                case '*':
+                    res = parseFloat(num1) * parseFloat(num2);
+                    break;
+                case '/':
+                    res = parseFloat(num1) / parseFloat(num2);
+                    break;
+            }
             result.innerHTML = res;
         }
 
