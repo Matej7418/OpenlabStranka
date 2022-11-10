@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piskvorky</title>
+
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #445070;
+        }
+
+        section {
+            text-align: center;
+        }
+
+        .cell {
+            font-family: "Permanent Marker", cursive;
+            width: 100px;
+            height: 100px;
+            box-shadow: 2px 2px 0px 2px #29324B, -2px -2px 0px 2px #29324B, 3px 3px 10px 2px #111111 inset, -3px -3px 10px 2px #111111 inset;
+            border: 2px solid #29324B;
+            cursor: pointer;
+            line-height: 100px;
+            font-size: 60px;
+        }
+
+        .title {
+            font-size: 100px;
+            color: #00798A;
+            margin: 20px auto;
+            text-shadow: 5px 5px 5px #000000;
+            user-select: none;
+        }
+
+        .game {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, auto);
+            width: 310px;
+            margin: 10px 10px;
+            background-color: #D5E6EC;
+            color: #000000;
+            text-shadow: 2px 2px 2px #000, 4px 4px 4px #000;
+            user-select: none;
+        }
+
+        .status {
+            font-size: 50px;
+            color: #00798A;
+            text-shadow: 4px 4px 4px #000000;
+            margin: 20px auto;
+            user-select: none;
+        }
+
+        .score {
+            font-size: 50px;
+            color: #0b657d;
+            text-shadow: 4px 4px 4px #000000;
+            margin: 0px auto;
+            user-select: none;
+        }
+
+        .restart {
+            background-color: #D5E6EC;
+            width: 200px;
+            height: 50px;
+            font-size: 25px;
+            color: #00798A;
+            text-shadow: 1px 1px 1px #000000;
+            box-shadow: 1px 1px 0px 2px #29324B, -1px -1px 0px 2px #29324B, 2px 2px 10px 2px #111111 inset, -2px -2px 10px 2px #111111 inset;
+            border: 1px solid #29324B;
+            margin: 30px auto;
+        }
+        .back:hover, .restart:hover { background-color: #89989e; }
+
+        .back {
+            background-color: #D5E6EC;
+            width: 200px;
+            height: 50px;
+            font-size: 25px;
+            color: #00798A;
+            text-shadow: 1px 1px 1px #000000;
+            box-shadow: 1px 1px 0px 2px #29324B, -1px -1px 0px 2px #29324B, 2px 2px 10px 2px #111111 inset, -2px -2px 10px 2px #111111 inset;
+            border: 1px solid #29324B;
+            margin: 20px 20px;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="location.href='index.html'" type="button" class="back">Go Back</button>
+    <section>
+        <h1 class="title">Piškvorky <i>3D!</i></h1>
+        <div class="game">
+            <div class="container">
+                <div cell-index="0" class="cell"></div>
+                <div cell-index="1" class="cell"></div>
+                <div cell-index="2" class="cell"></div>
+                <div cell-index="3" class="cell"></div>
+                <div cell-index="4" class="cell"></div>
+                <div cell-index="5" class="cell"></div>
+                <div cell-index="6" class="cell"></div>
+                <div cell-index="7" class="cell"></div>
+                <div cell-index="8" class="cell"></div>
+            </div>
+            <div class="container">
+                <div cell-index="9" class="cell"></div>
+                <div cell-index="10" class="cell"></div>
+                <div cell-index="11" class="cell"></div>
+                <div cell-index="12" class="cell"></div>
+                <div cell-index="13" class="cell"></div>
+                <div cell-index="14" class="cell"></div>
+                <div cell-index="15" class="cell"></div>
+                <div cell-index="16" class="cell"></div>
+                <div cell-index="17" class="cell"></div>
+            </div>
+            <div class="container">
+                <div cell-index="18" class="cell"></div>
+                <div cell-index="19" class="cell"></div>
+                <div cell-index="20" class="cell"></div>
+                <div cell-index="21" class="cell"></div>
+                <div cell-index="22" class="cell"></div>
+                <div cell-index="23" class="cell"></div>
+                <div cell-index="24" class="cell"></div>
+                <div cell-index="25" class="cell"></div>
+                <div cell-index="26" class="cell"></div>
+            </div>
+        </div>
+        <h2 class="status"></h2>
+        <h2 class="score"></h2>
+        <button class="restart">Restart Game</button>
+    </section>
+
+    <script>
+        const statusDisplay = document.querySelector('.status');
+        const scoreDisplay = document.querySelector('.score');
+
+        let gameActive = true;
+        let currentPlayer = "X";
+        let gameState = ["", "", "", "", "", "", "", "", ""];
+        let turn = 1;
+        let scores = [0, 0, 0];
+
+        const winMessage = () => `Player ${currentPlayer} has won!`;
+        const drawMessage = () => 'Game ended in a draw!';
+        const turnMessage = () => `It's ${currentPlayer}'s turn`;
+        const scoreMessage = () => `X: ${scores[0]} O: ${scores[1]} Draw: ${scores[2]}`;
+
+        statusDisplay.innerHTML = turnMessage();
+        scoreDisplay.innerHTML = scoreMessage();
+
+        const winConditions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ]
+
+        function handleCellPlayed(clickedCell, clickedCellIndex) {
+            gameState[clickedCellIndex] = currentPlayer;
+            clickedCell.innerHTML = currentPlayer;
+        }
+
+        function handlePlayerChange() {
+            currentPlayer = currentPlayer === "X" ? "O" : "X";
+            statusDisplay.innerHTML = turnMessage();
+        }
+
+        function handleResultValidation() {
+            let roundWon = false;
+            for(let i = 0; i <= 7; i++) {
+            const winCon = winConditions[i];
+                const a = gameState[winCon[0]];
+                const b = gameState[winCon[1]];
+                const c = gameState[winCon[2]];
+                if(a === '' || b === '' || c === '')
+                    continue;
+                if(a === b && b === c) {
+                    roundWon = true;
+                    break
+                }
+            }
+
+            if(roundWon) {
+                statusDisplay.innerHTML = winMessage();
+                scores[currentPlayer === "X" ? 0 : 1]++;
+                scoreDisplay.innerHTML = scoreMessage();
+                gameActive = false;
+                return;
+            }
+
+            const roundDraw = !gameState.includes("");
+            if(roundDraw) {
+                statusDisplay.innerHTML = drawMessage();
+                scores[2]++;
+                scoreDisplay.innerHTML = scoreMessage();
+                gameActive = false;
+                return;
+            }
+
+            handlePlayerChange();
+        }
+
+        function handleCellClick(clickedCellEvent) {
+            const clickedCell = clickedCellEvent.target;
+            const clickedCellIndex = parseInt(clickedCell.getAttribute('cell-index'));
+
+            if(gameState[clickedCellIndex] !== "" || !gameActive)
+                return;
+
+            handleCellPlayed(clickedCell, clickedCellIndex);
+            handleResultValidation();
+        }
+
+        function handleRestartGame() {
+            gameActive = true;
+            startingPlayer = startingPlayer === "X" ? "O" : "X";
+            currentPlayer = startingPlayer;
+            gameState = ["", "", "", "", "", "", "", "", ""];
+            turn = 1;
+            statusDisplay.innerHTML = turnMessage();
+            document.querySelectorAll('.cell').forEach(cell => cell.innerHTML = "");
+        }
+
+        function back() {
+            location.replace = "game_select.html";
+        }
+
+        document.querySelectorAll('.cell').forEach(cell => cell.addEventListener('click', handleCellClick));
+        document.querySelector('.restart').addEventListener('click', handleRestartGame);
+    </script>
+</body>
+</html>
